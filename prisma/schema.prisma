@@ -16,6 +16,7 @@ model Message {
   queued          Boolean   @default(false)
   free            Boolean   @default(false)
   saraPick        Boolean   @default(false)
+  hallOfFame      Boolean   @default(false)
   tier            Int       @default(1)
   likes           Int       @default(0)
   activatedAt     DateTime?

@@ -46,9 +46,8 @@ export async function GET() {
         orderBy: { createdAt: "desc" },
       }),
       prisma.message.findMany({
-        where: { paid: true, active: false, queued: false },
-        orderBy: { likes: "desc" },
-        take: 3,
+        where: { hallOfFame: true },
+        orderBy: { createdAt: "desc" },
         select: { id: true, content: true, username: true, free: true, tier: true, likes: true, createdAt: true },
       }),
       prisma.message.count({

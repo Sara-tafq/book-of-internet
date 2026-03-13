@@ -14,6 +14,8 @@ interface AdminMessage {
   active: boolean;
   tier: number;
   likes: number;
+  saraPick: boolean;
+  hallOfFame: boolean;
   createdAt: string;
 }
 
@@ -37,6 +39,8 @@ export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [data, setData] = useState<AdminData | null>(null);
   const [error, setError] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [toggling, setToggling] = useState(false);
 
   const login = async () => {
     try {
@@ -44,6 +48,20 @@ export default function AdminPage() {
       if (res.ok) { setData(await res.json()); setAuthenticated(true); setError(""); }
       else setError("Wrong password");
     } catch { setError("Connection error"); }
+  };
+
+  const toggle = async (id: string, field: "saraPick" | "hallOfFame") => {
+    setToggling(true);
+    try {
+      await fetch("/api/admin", {
+        method: "PATCH",
+        headers: { "x-admin-password": password, "Content-Type": "application/json" },
+        body: JSON.stringify({ id, field }),
+      });
+      const res = await fetch("/api/admin", { headers: { "x-admin-password": password } });
+      if (res.ok) setData(await res.json());
+    } catch { /* ignore */ }
+    setToggling(false);
   };
 
   const exportCSV = () => {
@@ -110,14 +128,17 @@ export default function AdminPage() {
         <table className="w-full text-left text-sm">
           <thead style={{ borderBottom: "1px solid #E8E0D5", backgroundColor: "#FAF6F1" }}>
             <tr>
-              {["ID", "Content", "User", "Tier", "Type", "Likes", "Date"].map((h) => (
+              {["ID", "Content", "User", "Tier", "Type", "Likes", "Tags", "Date"].map((h) => (
                 <th key={h} className="px-4 py-3" style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {data?.messages.map((m) => (
-              <tr key={m.id} style={{ borderBottom: "1px solid #F0EBE3" }} className="hover:bg-[#FAF6F1]">
+              <tr key={m.id}
+                onClick={() => setSelectedId(selectedId === m.id ? null : m.id)}
+                style={{ borderBottom: "1px solid #F0EBE3", cursor: "pointer" }}
+                className="hover:bg-[#FAF6F1]">
                 <td className="px-4 py-3 text-xs font-mono" style={{ color: "#9A8F85" }}>{m.id.slice(0, 8)}</td>
                 <td className="px-4 py-3 text-xs max-w-[200px] truncate">{m.content}</td>
                 <td className="px-4 py-3 text-xs" style={{ color: "#9A8F85" }}>{m.username || "anon"}</td>
@@ -126,12 +147,52 @@ export default function AdminPage() {
                   {m.free ? <span style={{ color: "#B8860B" }}>Free</span> : <span style={{ color: "#C17D3C" }}>Paid</span>}
                 </td>
                 <td className="px-4 py-3 text-xs">{m.likes}</td>
+                <td className="px-4 py-3 text-xs space-x-1">
+                  {m.saraPick && <span className="inline-block px-1.5 py-0.5 text-[0.6rem]" style={{ backgroundColor: "#C17D3C", color: "#fff", borderRadius: 4 }}>Pick</span>}
+                  {m.hallOfFame && <span className="inline-block px-1.5 py-0.5 text-[0.6rem]" style={{ backgroundColor: "#B8860B", color: "#fff", borderRadius: 4 }}>HoF</span>}
+                </td>
                 <td className="px-4 py-3 text-xs" style={{ color: "#9A8F85" }}>{new Date(m.createdAt).toLocaleString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {selectedId && (
+        <div className="mt-4 p-4 flex items-center gap-3" style={{ backgroundColor: "#FAF6F1", border: "1px solid #E8E0D5" }}>
+          <span className="text-xs" style={{ color: "#9A8F85", fontFamily: INTER }}>
+            {data?.messages.find((m) => m.id === selectedId)?.content.substring(0, 40)}...
+          </span>
+          <div className="flex gap-2 ml-auto">
+            <button
+              disabled={toggling}
+              onClick={() => toggle(selectedId, "saraPick")}
+              className="px-4 py-2 text-xs transition-opacity hover:opacity-80 disabled:opacity-50"
+              style={{
+                backgroundColor: data?.messages.find((m) => m.id === selectedId)?.saraPick ? "#C17D3C" : "transparent",
+                color: data?.messages.find((m) => m.id === selectedId)?.saraPick ? "#fff" : "#C17D3C",
+                border: "1px solid #C17D3C",
+                fontFamily: SPACE,
+                fontWeight: 500,
+              }}>
+              {data?.messages.find((m) => m.id === selectedId)?.saraPick ? "Remove Sara's Pick" : "Add Sara's Pick"}
+            </button>
+            <button
+              disabled={toggling}
+              onClick={() => toggle(selectedId, "hallOfFame")}
+              className="px-4 py-2 text-xs transition-opacity hover:opacity-80 disabled:opacity-50"
+              style={{
+                backgroundColor: data?.messages.find((m) => m.id === selectedId)?.hallOfFame ? "#B8860B" : "transparent",
+                color: data?.messages.find((m) => m.id === selectedId)?.hallOfFame ? "#fff" : "#B8860B",
+                border: "1px solid #B8860B",
+                fontFamily: SPACE,
+                fontWeight: 500,
+              }}>
+              {data?.messages.find((m) => m.id === selectedId)?.hallOfFame ? "Remove Hall of Fame" : "Add Hall of Fame"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {data?.contactMessages && data.contactMessages.length > 0 && (
         <>
