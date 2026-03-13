@@ -8,23 +8,20 @@ export async function GET() {
     const [currentMessage, totalCount, freeSlot, hallOfFame] = await Promise.all([
       prisma.message.findFirst({
         where: { active: true },
-        select: { id: true, content: true, free: true, likes: true, createdAt: true },
+        select: { id: true, content: true, username: true, free: true, tier: true, likes: true, createdAt: true },
       }),
       prisma.message.count({
         where: { paid: true },
       }),
       prisma.freeSlot.findFirst({
-        where: {
-          used: false,
-          expiresAt: { gt: new Date() },
-        },
+        where: { used: false, expiresAt: { gt: new Date() } },
         orderBy: { createdAt: "desc" },
       }),
       prisma.message.findMany({
         where: { paid: true, active: false },
         orderBy: { likes: "desc" },
         take: 3,
-        select: { id: true, content: true, free: true, likes: true, createdAt: true },
+        select: { id: true, content: true, username: true, free: true, tier: true, likes: true, createdAt: true },
       }),
     ]);
 

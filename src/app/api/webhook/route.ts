@@ -22,13 +22,11 @@ export async function POST(req: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
-    // Find the pending message
     const message = await prisma.message.findUnique({
       where: { stripeSessionId: session.id },
     });
 
     if (message) {
-      // Activate this message, deactivate all others
       await prisma.$transaction([
         prisma.message.updateMany({
           where: { active: true },
@@ -40,17 +38,33 @@ export async function POST(req: NextRequest) {
         }),
       ]);
 
-      // Check if this is every 10th paid message → create free slot
+      // Free slot: triggered randomly between 30th and 50th paid message
       const paidCount = await prisma.message.count({
         where: { paid: true, free: false },
       });
 
-      if (paidCount % 10 === 0) {
-        await prisma.freeSlot.create({
-          data: {
-            expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
-          },
-        });
+      if (paidCount >= 30 && paidCount <= 50) {
+        // Check if a free slot was already given in this range
+        const existingSlotInRange = await prisma.freeSlot.count();
+        const expectedSlots = Math.floor((paidCount - 30) / 1); // at most 1 slot per range
+
+        // Random chance: ~5% per message in the 30-50 range, guaranteed by 50th
+        const random = Math.random();
+        const threshold = paidCount === 50 ? 1 : 0.05;
+
+        if (existingSlotInRange === 0 || (random < threshold && paidCount > 30)) {
+          // Only create if no unused slot exists
+          const unusedSlot = await prisma.freeSlot.findFirst({
+            where: { used: false, expiresAt: { gt: new Date() } },
+          });
+          if (!unusedSlot) {
+            await prisma.freeSlot.create({
+              data: {
+                expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+              },
+            });
+          }
+        }
       }
     }
   }

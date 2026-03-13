@@ -15,7 +15,9 @@ export async function GET(req: NextRequest) {
     orderBy: { createdAt: "desc" },
   });
 
-  const totalRevenue = messages.filter((m) => !m.free).length; // $1 each
+  const totalRevenue = messages
+    .filter((m) => !m.free)
+    .reduce((sum, m) => sum + (m.tier === 2 ? 5 : 1), 0);
   const totalFree = messages.filter((m) => m.free).length;
 
   return NextResponse.json({

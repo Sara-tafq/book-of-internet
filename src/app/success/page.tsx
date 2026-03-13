@@ -4,8 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-const FRAUNCES = "var(--font-fraunces)";
-const SPACE = "var(--font-space)";
+const SYNE = "var(--font-syne)";
+const DM = "var(--font-dm)";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -13,10 +13,7 @@ function SuccessContent() {
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
 
   useEffect(() => {
-    if (!sessionId) {
-      setStatus("error");
-      return;
-    }
+    if (!sessionId) { setStatus("error"); return; }
     const timer = setTimeout(() => setStatus("success"), 1500);
     return () => clearTimeout(timer);
   }, [sessionId]);
@@ -24,58 +21,25 @@ function SuccessContent() {
   return (
     <>
       {status === "loading" && (
-        <p
-          className="italic animate-pulse text-lg"
-          style={{ color: "#9A8F85", fontFamily: FRAUNCES, fontWeight: 300 }}
-        >
-          Publishing your message...
-        </p>
+        <p className="italic animate-pulse text-lg" style={{ color: "#D6D6D6", fontFamily: DM }}>publishing your message...</p>
       )}
-
       {status === "success" && (
         <div className="text-center animate-fade-in">
           <p className="text-2xl mb-4">✨</p>
-          <p
-            className="text-lg mb-2"
-            style={{ fontFamily: FRAUNCES, fontWeight: 400 }}
-          >
-            Your message is live.
-          </p>
-          <p
-            className="italic text-sm mb-8"
-            style={{ color: "#9A8F85", fontFamily: FRAUNCES, fontWeight: 300 }}
-          >
-            Until someone else pays. Then it becomes part of the book.
-          </p>
-          <Link
-            href="/"
-            className="inline-block px-8 py-3 text-sm transition-opacity hover:opacity-80"
-            style={{
-              backgroundColor: "#1a1a1a",
-              color: "#fff",
-              fontFamily: SPACE,
-              fontWeight: 500,
-            }}
-          >
-            See the billboard
+          <p className="text-lg mb-2" style={{ fontFamily: DM, fontWeight: 500 }}>your message is live.</p>
+          <p className="italic text-sm mb-8" style={{ color: "#D6D6D6", fontFamily: DM }}>until someone else pays. then it becomes part of the book.</p>
+          <Link href="/" className="inline-block px-8 py-3 text-sm transition-opacity hover:opacity-80"
+            style={{ backgroundColor: "#F58F7C", color: "#2C2B30", borderRadius: 12, fontFamily: SYNE, fontWeight: 700 }}>
+            see the billboard
           </Link>
         </div>
       )}
-
       {status === "error" && (
         <div className="text-center animate-fade-in">
-          <p className="text-sm mb-4" style={{ color: "#c44" }}>Something went wrong.</p>
-          <Link
-            href="/"
-            className="inline-block px-8 py-3 text-sm transition-opacity hover:opacity-80"
-            style={{
-              backgroundColor: "#1a1a1a",
-              color: "#fff",
-              fontFamily: SPACE,
-              fontWeight: 500,
-            }}
-          >
-            Go back
+          <p className="text-sm mb-4" style={{ color: "#F58F7C" }}>something went wrong.</p>
+          <Link href="/" className="inline-block px-8 py-3 text-sm transition-opacity hover:opacity-80"
+            style={{ backgroundColor: "#F58F7C", color: "#2C2B30", borderRadius: 12, fontFamily: SYNE, fontWeight: 700 }}>
+            go back
           </Link>
         </div>
       )}
@@ -86,24 +50,10 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6">
-      <h1
-        className="italic mb-10"
-        style={{
-          fontFamily: FRAUNCES,
-          fontWeight: 300,
-          fontSize: "1.5rem",
-          letterSpacing: "0.15em",
-        }}
-      >
+      <h1 className="mb-10" style={{ fontFamily: SYNE, fontWeight: 800, fontSize: "1.5rem", color: "#F2C4CE" }}>
         The Book of Internet
       </h1>
-      <Suspense
-        fallback={
-          <p className="italic animate-pulse text-sm" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>
-            Loading...
-          </p>
-        }
-      >
+      <Suspense fallback={<p className="italic animate-pulse text-sm" style={{ color: "#6B6B6E" }}>loading...</p>}>
         <SuccessContent />
       </Suspense>
     </div>

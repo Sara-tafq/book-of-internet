@@ -9,7 +9,8 @@ datasource db {
 
 model Message {
   id              String   @id @default(cuid())
-  content         String   @db.VarChar(500)
+  content         String
+  username        String?
   paid            Boolean  @default(false)
   active          Boolean  @default(false)
   free            Boolean  @default(false)

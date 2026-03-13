@@ -13,11 +13,12 @@ async function main() {
 
   await prisma.message.create({
     data: {
-      content: "One dollar. One message. One second of fame. Then you're gone — but never forgotten.",
+      content: "This is the beginning. You don't know me. I don't know you. But we're both here, at the same strange place on the internet, at the same strange time. Write something. Make it count. Once upon a time, oops, too cheesy. I'll let you start the book.",
+      username: "Sara",
       paid: true,
       active: true,
       free: false,
-      tier: 1,
+      tier: 2,
     },
   });
 
