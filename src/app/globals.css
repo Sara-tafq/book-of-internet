@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Disable Tailwind v4 automatic dark mode — force light theme always */
+@variant dark (&:is(.dark *));
+
+/* Force light color scheme globally */
+html {
+  color-scheme: light !important;
+}
+
+body {
+  background-color: #F7F3EE !important;
+  color: #1a1a1a !important;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

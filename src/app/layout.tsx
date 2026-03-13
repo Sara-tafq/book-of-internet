@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light" style={{ colorScheme: "light" }}>
       <body
         className={`${inter.variable} ${fraunces.variable} ${spaceGrotesk.variable} antialiased min-h-screen`}
         style={{
