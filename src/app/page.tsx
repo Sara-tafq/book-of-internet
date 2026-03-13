@@ -338,10 +338,8 @@ export default function Home() {
         </h1>
       </header>
 
-      <p className="text-center italic leading-relaxed px-4 mt-3 mb-8" style={{ color: "#4a4540", fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.05rem", lineHeight: 1.8 }}>
-        you pay $1. your message lives here. someone pays after you, you&apos;re gone.<br />
-        but we keep everything. one day it becomes a book.<br />
-        no pressure tho.
+      <p className="text-center italic px-4 mt-3 mb-6" style={{ color: "#4a4540", fontFamily: FRAUNCES, fontWeight: 300, fontSize: "0.95rem" }}>
+        you pay $1. your message lives here. someone pays after you, you&apos;re gone. but we keep everything. one day it becomes a book. no pressure tho.
       </p>
 
       <p className="text-center text-sm mb-2" style={{ color: "#6b6360", fontFamily: SPACE, fontWeight: 500 }}>
