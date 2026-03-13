@@ -1,8 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const FRAUNCES = "var(--font-fraunces)";
 const SPACE = "var(--font-space)";
@@ -11,6 +10,7 @@ const INTER = "var(--font-inter)";
 function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
+  const router = useRouter();
   const [status, setStatus] = useState<"loading" | "success" | "queued" | "error">("loading");
   const [queuePosition, setQueuePosition] = useState<number | null>(null);
 
@@ -36,6 +36,13 @@ function SuccessContent() {
     checkStatus();
   }, [sessionId]);
 
+  useEffect(() => {
+    if (status === "success" || status === "queued" || status === "error") {
+      const timeout = setTimeout(() => router.push("/"), 4000);
+      return () => clearTimeout(timeout);
+    }
+  }, [status, router]);
+
   return (
     <>
       {status === "loading" && (
@@ -45,11 +52,7 @@ function SuccessContent() {
         <div className="text-center animate-fade-in">
           <p className="text-2xl mb-4">✨</p>
           <p className="text-lg mb-2" style={{ fontFamily: INTER, fontWeight: 500 }}>your message is live.</p>
-          <p className="italic text-sm mb-8" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>until someone else pays. then it becomes part of the book.</p>
-          <Link href="/" className="inline-block px-8 py-3 text-sm transition-opacity hover:opacity-80"
-            style={{ backgroundColor: "#1a1a1a", color: "#fff", fontFamily: SPACE, fontWeight: 500 }}>
-            see the billboard
-          </Link>
+          <p className="italic text-sm" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>until someone else pays. then it becomes part of the book.</p>
         </div>
       )}
       {status === "queued" && (
@@ -59,20 +62,12 @@ function SuccessContent() {
           <p className="italic text-sm mb-2" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>
             there {queuePosition === 1 ? "is" : "are"} {queuePosition} message{queuePosition !== 1 ? "s" : ""} ahead.
           </p>
-          <p className="italic text-sm mb-8" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>each message gets 30 seconds of fame. yours is coming up.</p>
-          <Link href="/" className="inline-block px-8 py-3 text-sm transition-opacity hover:opacity-80"
-            style={{ backgroundColor: "#1a1a1a", color: "#fff", fontFamily: SPACE, fontWeight: 500 }}>
-            watch the billboard
-          </Link>
+          <p className="italic text-sm" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>each message gets 30 seconds of fame. yours is coming up.</p>
         </div>
       )}
       {status === "error" && (
         <div className="text-center animate-fade-in">
-          <p className="text-sm mb-4" style={{ color: "#C17D3C" }}>something went wrong.</p>
-          <Link href="/" className="inline-block px-8 py-3 text-sm transition-opacity hover:opacity-80"
-            style={{ backgroundColor: "#1a1a1a", color: "#fff", fontFamily: SPACE, fontWeight: 500 }}>
-            go back
-          </Link>
+          <p className="text-sm" style={{ color: "#C17D3C" }}>something went wrong. redirecting...</p>
         </div>
       )}
     </>
