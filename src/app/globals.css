@@ -1,16 +1,63 @@
 @import "tailwindcss";
 
-/* Disable Tailwind v4 automatic dark mode — force light theme always */
+/* Disable Tailwind v4 automatic dark mode */
 @variant dark (&:is(.dark *));
 
-/* Force light color scheme globally */
+:root {
+  --bg-page: #F7F3EE;
+  --bg-main: #FFFFFF;
+  --bg-side: #F0EBE3;
+  --bg-card: #FAF6F1;
+  --bg-card-warm: #FFF8F0;
+  --bg-card-pick: #FFF3E0;
+  --bg-msg: #FFFAF5;
+  --bg-input: transparent;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b6360;
+  --text-muted: #9A8F85;
+  --text-meta: #4a4540;
+  --border: #E8E0D5;
+  --border-light: #F0EBE3;
+  --accent: #C17D3C;
+  --accent-gold: #B8860B;
+  --btn-bg: #1a1a1a;
+  --btn-text: #fff;
+  --nav-bg: #FFFFFF;
+}
+
+html.dark {
+  --bg-page: #111110;
+  --bg-main: #1a1918;
+  --bg-side: #1e1d1b;
+  --bg-card: #252321;
+  --bg-card-warm: #2a2520;
+  --bg-card-pick: #2e2518;
+  --bg-msg: #2a2520;
+  --bg-input: transparent;
+  --text-primary: #e8e0d5;
+  --text-secondary: #a09890;
+  --text-muted: #7a7068;
+  --text-meta: #b0a898;
+  --border: #3a3530;
+  --border-light: #302b28;
+  --accent: #d4944e;
+  --accent-gold: #d4a020;
+  --btn-bg: #e8e0d5;
+  --btn-text: #1a1918;
+  --nav-bg: #1a1918;
+}
+
 html {
-  color-scheme: light !important;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background-color: #F7F3EE !important;
-  color: #1a1a1a !important;
+  background-color: var(--bg-page) !important;
+  color: var(--text-primary) !important;
 }
 
 @keyframes fadeIn {

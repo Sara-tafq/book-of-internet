@@ -33,13 +33,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light" style={{ colorScheme: "light" }}>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${fraunces.variable} ${spaceGrotesk.variable} antialiased min-h-screen`}
         style={{
           fontFamily: "var(--font-inter), system-ui, sans-serif",
-          backgroundColor: "#F7F3EE",
-          color: "#1a1a1a",
+          backgroundColor: "var(--bg-page)",
+          color: "var(--text-primary)",
         }}
       >
         {children}

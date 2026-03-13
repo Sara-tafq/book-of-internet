@@ -87,7 +87,7 @@ function YouTubeIcon() {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-center uppercase mb-5" style={{ fontSize: "0.7rem", letterSpacing: "0.15em", color: "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>
+    <p className="text-center uppercase mb-5" style={{ fontSize: "0.7rem", letterSpacing: "0.15em", color: "var(--text-muted)", fontFamily: SPACE, fontWeight: 500 }}>
       {children}
     </p>
   );
@@ -110,6 +110,19 @@ export default function Home() {
   const [contactMsg, setContactMsg] = useState("");
   const [contactSent, setContactSent] = useState(false);
   const [contactLoading, setContactLoading] = useState(false);
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("boi-dark");
+    if (stored === "true") { setDark(true); document.documentElement.classList.add("dark"); }
+  }, []);
+
+  const toggleDark = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("boi-dark", String(next));
+  };
 
   const maxChars = tier === 1 ? 200 : 1200;
   const price = tier === 1 ? 1 : 5;
@@ -229,14 +242,14 @@ export default function Home() {
           <span className="inline-flex items-center gap-1.5"><StarIcon /> Sara&apos;s Choice</span>
         </SectionLabel>
         {data?.saraPick ? (
-          <div className="p-5" style={{ backgroundColor: "#FFF3E0", borderLeft: "4px solid #C17D3C" }}>
+          <div className="p-5" style={{ backgroundColor: "var(--bg-card-pick)", borderLeft: "4px solid var(--accent)" }}>
             <p className="italic text-sm leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400 }}>
               &ldquo;{data.saraPick.content}&rdquo;
             </p>
           </div>
         ) : (
-          <div className="p-5" style={{ backgroundColor: "#FAF6F1" }}>
-            <p className="italic text-xs" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>no pick yet.</p>
+          <div className="p-5" style={{ backgroundColor: "var(--bg-card)" }}>
+            <p className="italic text-xs" style={{ color: "var(--text-muted)", fontFamily: FRAUNCES }}>no pick yet.</p>
           </div>
         )}
       </div>
@@ -246,60 +259,60 @@ export default function Home() {
         <div className="flex flex-col gap-3">
           {data?.highlights && data.highlights.length > 0 ? (
             data.highlights.map((h) => (
-              <div key={h.id} className="p-4" style={{ backgroundColor: "#FAF6F1" }}>
-                <p className="italic text-xs leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400, color: "#1a1a1a" }}>
+              <div key={h.id} className="p-4" style={{ backgroundColor: "var(--bg-card)" }}>
+                <p className="italic text-xs leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400, color: "var(--text-primary)" }}>
                   &ldquo;{h.content}&rdquo;
                 </p>
               </div>
             ))
           ) : (
-            <p className="text-xs" style={{ color: "#9A8F85", fontFamily: INTER }}>no highlights yet.</p>
+            <p className="text-xs" style={{ color: "var(--text-muted)", fontFamily: INTER }}>no highlights yet.</p>
           )}
         </div>
       </div>
 
       <div className="mt-auto pt-6">
-        <div className="p-5" style={{ backgroundColor: "#FAF6F1" }}>
+        <div className="p-5" style={{ backgroundColor: "var(--bg-card)" }}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 flex items-center justify-center text-xs" style={{ borderRadius: "50%", backgroundColor: "#C17D3C", color: "#fff", fontFamily: SPACE, fontWeight: 500 }}>S</div>
+            <div className="w-8 h-8 flex items-center justify-center text-xs" style={{ borderRadius: "50%", backgroundColor: "var(--accent)", color: "#fff", fontFamily: SPACE, fontWeight: 500 }}>S</div>
             <span className="text-sm" style={{ fontFamily: SPACE, fontWeight: 500 }}>Sara</span>
           </div>
-          <p className="text-xs leading-relaxed" style={{ fontFamily: INTER, color: "#1a1a1a" }}>
+          <p className="text-xs leading-relaxed" style={{ fontFamily: INTER, color: "var(--text-primary)" }}>
             Hi, I&apos;m Sara.<br />Having fun on the internet.
           </p>
-          <p className="text-xs italic leading-relaxed mt-2" style={{ fontFamily: FRAUNCES, color: "#C17D3C" }}>
+          <p className="text-xs italic leading-relaxed mt-2" style={{ fontFamily: FRAUNCES, color: "var(--accent)" }}>
             &ldquo;My daily struggle is proving I am not AI&rdquo;
           </p>
-          <p className="text-xs leading-relaxed mt-2" style={{ fontFamily: INTER, color: "#9A8F85" }}>
+          <p className="text-xs leading-relaxed mt-2" style={{ fontFamily: INTER, color: "var(--text-muted)" }}>
             I run this place. You&apos;ll find me live on Twitch, TikTok and YouTube from time to time. You&apos;ll never know when tho.
           </p>
           <div className="flex gap-4 mt-4">
-            <a href="https://twitch.tv" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#1a1a1a" }}><TwitchIcon /></a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#1a1a1a" }}><TikTokIcon /></a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#1a1a1a" }}><YouTubeIcon /></a>
+            <a href="https://twitch.tv" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "var(--text-primary)" }}><TwitchIcon /></a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "var(--text-primary)" }}><TikTokIcon /></a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "var(--text-primary)" }}><YouTubeIcon /></a>
           </div>
         </div>
       </div>
 
       <div>
         <SectionLabel>Contact Sara</SectionLabel>
-        <div className="p-5" style={{ backgroundColor: "#FAF6F1" }}>
+        <div className="p-5" style={{ backgroundColor: "var(--bg-card)" }}>
           {contactSent ? (
-            <p className="text-xs text-center" style={{ fontFamily: INTER, color: "#C17D3C" }}>sent! i&apos;ll read it, promise.</p>
+            <p className="text-xs text-center" style={{ fontFamily: INTER, color: "var(--accent)" }}>sent! i&apos;ll read it, promise.</p>
           ) : (
             <div className="flex flex-col gap-3">
               <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value.slice(0, 50))} placeholder="name (optional)"
                 className="w-full px-3 py-2 text-xs focus:outline-none"
-                style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }} />
+                style={{ border: "1px solid var(--border)", backgroundColor: "transparent", color: "var(--text-primary)", fontFamily: INTER }} />
               <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value.slice(0, 100))} placeholder="email (optional)"
                 className="w-full px-3 py-2 text-xs focus:outline-none"
-                style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }} />
+                style={{ border: "1px solid var(--border)", backgroundColor: "transparent", color: "var(--text-primary)", fontFamily: INTER }} />
               <textarea value={contactMsg} onChange={(e) => setContactMsg(e.target.value.slice(0, 1000))} placeholder="your message..."
                 rows={3} className="w-full px-3 py-2 text-xs resize-none focus:outline-none"
-                style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }} />
+                style={{ border: "1px solid var(--border)", backgroundColor: "transparent", color: "var(--text-primary)", fontFamily: INTER }} />
               <button onClick={handleContact} disabled={!contactMsg.trim() || contactLoading}
                 className="w-full py-2 text-xs disabled:opacity-30 transition-opacity hover:opacity-80"
-                style={{ backgroundColor: "#C17D3C", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
+                style={{ backgroundColor: "var(--accent)", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
                 {contactLoading ? "sending..." : "send"}
               </button>
             </div>
@@ -315,15 +328,15 @@ export default function Home() {
         <span className="inline-flex items-center gap-1.5"><TrophyIcon /> Hall of Fame</span>
       </SectionLabel>
 
-      <div className="p-4 mb-3" style={{ backgroundColor: "#FFF8F0", border: "1px solid #E8E0D5" }}>
+      <div className="p-4 mb-3" style={{ backgroundColor: "var(--bg-card-warm)", border: "1px solid var(--border)" }}>
         <div className="flex items-center gap-1.5 mb-2">
           <StarIcon />
-          <span className="uppercase" style={{ fontSize: "0.6rem", letterSpacing: "0.1em", color: "#C17D3C", fontFamily: SPACE, fontWeight: 500 }}>First Writer</span>
+          <span className="uppercase" style={{ fontSize: "0.6rem", letterSpacing: "0.1em", color: "var(--accent)", fontFamily: SPACE, fontWeight: 500 }}>First Writer</span>
         </div>
-        <p className="text-xs leading-relaxed italic" style={{ fontFamily: FRAUNCES, color: "#1a1a1a" }}>
+        <p className="text-xs leading-relaxed italic" style={{ fontFamily: FRAUNCES, color: "var(--text-primary)" }}>
           &ldquo;This is the beginning. You don&apos;t know me. I don&apos;t know you. But we&apos;re both here, at the same strange place on the internet, at the same strange time. Write something. Make it count. Once upon a time, oops, too cheesy. I&apos;ll let you start the book.&rdquo;
         </p>
-        <p className="mt-2" style={{ fontSize: "0.65rem", color: "#C17D3C", fontFamily: INTER }}>— Sara</p>
+        <p className="mt-2" style={{ fontSize: "0.65rem", color: "var(--accent)", fontFamily: INTER }}>— Sara</p>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -331,11 +344,11 @@ export default function Home() {
           data.hallOfFame.map((msg) => {
             const isLiked = likedIds.has(msg.id);
             return (
-              <div key={msg.id} className="p-4 flex flex-col" style={{ backgroundColor: "#FFF8F0" }}>
+              <div key={msg.id} className="p-4 flex flex-col" style={{ backgroundColor: "var(--bg-card-warm)" }}>
                 <p className="italic text-sm leading-relaxed mb-1" style={{ fontFamily: FRAUNCES, fontWeight: 400 }}>
                   &ldquo;{msg.content}&rdquo;
                 </p>
-                <p className="mb-3" style={{ fontSize: "0.65rem", color: "#9A8F85", fontFamily: INTER }}>— {msg.username || "anonymous"}</p>
+                <p className="mb-3" style={{ fontSize: "0.65rem", color: "var(--text-muted)", fontFamily: INTER }}>— {msg.username || "anonymous"}</p>
                 <button
                   onClick={() => handleLike(msg.id)}
                   className={`self-start text-xs flex items-center gap-1.5 transition-colors ${bouncingId === msg.id ? "animate-like-bounce" : ""}`}
@@ -348,7 +361,7 @@ export default function Home() {
             );
           })
         ) : (
-          <p className="text-xs text-center" style={{ color: "#9A8F85", fontFamily: INTER }}>No messages yet.</p>
+          <p className="text-xs text-center" style={{ color: "var(--text-muted)", fontFamily: INTER }}>No messages yet.</p>
         )}
       </div>
     </div>
@@ -356,61 +369,66 @@ export default function Home() {
 
   const centerCol = (
     <div className="flex flex-col min-h-full">
-      <header className="pt-10 pb-3 text-center">
-        <h1 className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: "2.5rem", letterSpacing: "0.1em", color: "#1a1a1a" }}>
+      <header className="pt-10 pb-3 text-center relative">
+        <button onClick={toggleDark} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-70"
+          style={{ color: "var(--text-muted)", fontSize: "1rem" }}
+          aria-label="Toggle dark mode">
+          {dark ? "\u2600\uFE0F" : "\u{1F319}"}
+        </button>
+        <h1 className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: "2.5rem", letterSpacing: "0.1em", color: "var(--text-primary)" }}>
           The Book of Internet
         </h1>
       </header>
 
-      <p className="text-center italic px-4 mt-3 mb-6" style={{ color: "#4a4540", fontFamily: FRAUNCES, fontWeight: 300, fontSize: "0.95rem" }}>
+      <p className="text-center italic px-4 mt-3 mb-6" style={{ color: "var(--text-meta)", fontFamily: FRAUNCES, fontWeight: 300, fontSize: "0.95rem" }}>
         you pay $1. your message lives here. someone pays after you, you&apos;re gone. but we keep everything. one day it becomes a book. no pressure tho.
       </p>
 
-      <p className="text-center text-sm mb-2" style={{ color: "#6b6360", fontFamily: SPACE, fontWeight: 500 }}>
+      <p className="text-center text-sm mb-2" style={{ color: "var(--text-secondary)", fontFamily: SPACE, fontWeight: 500 }}>
         {data?.totalCount ?? 0} message{(data?.totalCount ?? 0) !== 1 ? "s" : ""} in the book
       </p>
 
       {data?.message && data.secondsLeft !== null && data.secondsLeft > 0 && (
-        <p className="text-center text-xs mb-1" style={{ color: "#C17D3C", fontFamily: SPACE, fontWeight: 500 }}>
+        <p className="text-center text-xs mb-1" style={{ color: "var(--accent)", fontFamily: SPACE, fontWeight: 500 }}>
           live for {data.secondsLeft}s more
         </p>
       )}
 
       {(data?.queueCount ?? 0) > 0 && (
-        <p className="text-center text-sm mb-2" style={{ color: "#6b6360", fontFamily: INTER, fontStyle: "italic" }}>
+        <p className="text-center text-sm mb-2" style={{ color: "var(--text-secondary)", fontFamily: INTER, fontStyle: "italic" }}>
           {data!.queueCount} message{data!.queueCount !== 1 ? "s" : ""} waiting in queue
         </p>
       )}
 
-      <div className="border-t mt-2" style={{ borderColor: "#E8E0D5" }} />
+      <div className="border-t mt-2" style={{ borderColor: "var(--border)" }} />
 
       {hasFreeSlot && (
-        <div className="animate-pulse-gold py-3 px-6 text-center text-sm" style={{ backgroundColor: "#FFF3CD", color: "#B8860B", fontFamily: SPACE, fontWeight: 500 }}>
+        <div className="animate-pulse-gold py-3 px-6 text-center text-sm" style={{ backgroundColor: "var(--bg-card-pick)", color: "var(--accent-gold)", fontFamily: SPACE, fontWeight: 500 }}>
           free slot unlocked — post for free, {data!.freeSlot!.minutesLeft} minute{data!.freeSlot!.minutesLeft !== 1 ? "s" : ""} left
         </div>
       )}
 
       <div className="py-14 px-6 text-center min-h-[200px] flex flex-col items-center justify-center flex-1">
         {data?.message ? (
-          <div key={animKey} className="animate-fade-in p-8" style={{ border: "2px solid #C17D3C", backgroundColor: "#FFFAF5" }}>
-            <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: data.message.tier === 2 ? "2rem" : "1.8rem", lineHeight: 1.7, color: "#1a1a1a" }}>
+          <div key={animKey} className="animate-fade-in p-8" style={{ border: "2px solid var(--accent)", backgroundColor: "var(--bg-msg)" }}>
+            <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: data.message.tier === 2 ? "2rem" : "1.8rem", lineHeight: 1.7, color: "var(--text-primary)" }}>
               &ldquo;{data.message.content}&rdquo;
             </p>
-            <p className="mt-4" style={{ fontSize: "0.85rem", color: "#6b6360", fontFamily: INTER }}>
+            <p className="mt-4" style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontFamily: INTER }}>
               — {data.message.username || "anonymous"}
             </p>
-            <p className="mt-3" style={{ fontSize: "0.75rem", color: "#C17D3C", fontFamily: SPACE, fontWeight: 500 }}>
+            <p className="mt-3" style={{ fontSize: "0.75rem", color: "var(--accent)", fontFamily: SPACE, fontWeight: 500 }}>
               this message has been here for {formatElapsed(elapsed)}
             </p>
           </div>
         ) : (
-          <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.3rem", color: "#6b6360" }}>
+          <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.3rem", color: "var(--text-secondary)" }}>
             This is the beginning. You don&apos;t know me. I don&apos;t know you. But we&apos;re both here, at the same strange place on the internet, at the same strange time. Write something. Make it count. Once upon a time, oops, too cheesy. I&apos;ll let you start the book.
           </p>
         )}
       </div>
 
-      <div className="border-t mb-8" style={{ borderColor: "#E8E0D5" }} />
+      <div className="border-t mb-8" style={{ borderColor: "var(--border)" }} />
 
       <input
         type="text"
@@ -418,7 +436,7 @@ export default function Home() {
         onChange={(e) => setUsername(e.target.value.slice(0, 30))}
         placeholder="your name (optional, anonymous by default)"
         className="w-full px-4 py-3 text-sm mb-4 focus:outline-none transition"
-        style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }}
+        style={{ border: "1px solid var(--border)", backgroundColor: "transparent", color: "var(--text-primary)", fontFamily: INTER }}
       />
 
       {!hasFreeSlot && (
@@ -426,14 +444,14 @@ export default function Home() {
           <button
             onClick={() => { setTier(1); setContent((c) => c.slice(0, 200)); }}
             className="px-5 py-2 text-sm transition-all"
-            style={{ borderRadius: 999, backgroundColor: tier === 1 ? "#C17D3C" : "transparent", color: tier === 1 ? "#fff" : "#1a1a1a", border: tier === 1 ? "1px solid #C17D3C" : "1px solid #1a1a1a", fontFamily: SPACE, fontWeight: 500 }}
+            style={{ borderRadius: 999, backgroundColor: tier === 1 ? "var(--accent)" : "transparent", color: tier === 1 ? "#fff" : "var(--text-primary)", border: tier === 1 ? "1px solid var(--accent)" : "1px solid var(--text-primary)", fontFamily: SPACE, fontWeight: 500 }}
           >
             $1 · 200 chars
           </button>
           <button
             onClick={() => setTier(2)}
             className="px-5 py-2 text-sm transition-all"
-            style={{ borderRadius: 999, backgroundColor: tier === 2 ? "#C17D3C" : "transparent", color: tier === 2 ? "#fff" : "#1a1a1a", border: tier === 2 ? "1px solid #C17D3C" : "1px solid #1a1a1a", fontFamily: SPACE, fontWeight: 500 }}
+            style={{ borderRadius: 999, backgroundColor: tier === 2 ? "var(--accent)" : "transparent", color: tier === 2 ? "#fff" : "var(--text-primary)", border: tier === 2 ? "1px solid var(--accent)" : "1px solid var(--text-primary)", fontFamily: SPACE, fontWeight: 500 }}
           >
             $5 · 1200 chars
           </button>
@@ -447,9 +465,9 @@ export default function Home() {
           placeholder="Write your message..."
           rows={4}
           className="w-full px-4 py-4 text-sm resize-none focus:outline-none transition"
-          style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }}
+          style={{ border: "1px solid var(--border)", backgroundColor: "transparent", color: "var(--text-primary)", fontFamily: INTER }}
         />
-        <span className="absolute bottom-3 right-4 text-xs" style={{ color: "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>
+        <span className="absolute bottom-3 right-4 text-xs" style={{ color: "var(--text-muted)", fontFamily: SPACE, fontWeight: 500 }}>
           {content.length}/{maxChars}
         </span>
       </div>
@@ -457,19 +475,19 @@ export default function Home() {
       {hasFreeSlot ? (
         <button onClick={handleFreeSubmit} disabled={!content.trim() || loading}
           className="w-full py-3.5 text-sm transition-opacity disabled:opacity-30"
-          style={{ backgroundColor: "#B8860B", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
+          style={{ backgroundColor: "var(--accent-gold)", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
           {loading ? "Posting..." : "Post for free \u2192"}
         </button>
       ) : (
         <button onClick={handlePaidSubmit} disabled={!content.trim() || loading}
           className="w-full py-3.5 text-sm transition-opacity disabled:opacity-30"
-          style={{ backgroundColor: "#1a1a1a", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
+          style={{ backgroundColor: "var(--btn-bg)", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
           {loading ? "Redirecting..." : `Pay & Post \u00b7 $${price} \u2192`}
         </button>
       )}
 
-      <div className="border-t mt-10" style={{ borderColor: "#E8E0D5" }} />
-      <footer className="py-8 text-center text-xs italic" style={{ color: "#9A8F85", fontFamily: FRAUNCES, fontWeight: 300 }}>
+      <div className="border-t mt-10" style={{ borderColor: "var(--border)" }} />
+      <footer className="py-8 text-center text-xs italic" style={{ color: "var(--text-muted)", fontFamily: FRAUNCES, fontWeight: 300 }}>
         Every message is saved forever. One day, they&apos;ll all be in a book.
       </footer>
     </div>
@@ -478,18 +496,18 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 hidden md:grid w-full" style={{ gridTemplateColumns: "1fr 2.5fr 1fr" }}>
-        <aside className="p-8" style={{ backgroundColor: "#F0EBE3" }}>{leftCol}</aside>
-        <main className="px-14" style={{ backgroundColor: "#FFFFFF", boxShadow: "0 0 40px rgba(0,0,0,0.04)" }}>{centerCol}</main>
-        <aside className="p-8" style={{ backgroundColor: "#F0EBE3" }}>{rightCol}</aside>
+        <aside className="p-8" style={{ backgroundColor: "var(--bg-side)" }}>{leftCol}</aside>
+        <main className="px-14" style={{ backgroundColor: "var(--bg-main)", boxShadow: "0 0 40px rgba(0,0,0,0.04)" }}>{centerCol}</main>
+        <aside className="p-8" style={{ backgroundColor: "var(--bg-side)" }}>{rightCol}</aside>
       </div>
 
       <div className="flex-1 md:hidden flex flex-col pb-16">
         <div className="flex-1">
-          {mobileTab === "main" && <div className="min-h-full px-5" style={{ backgroundColor: "#FFFFFF" }}>{centerCol}</div>}
-          {mobileTab === "highlights" && <div className="p-5" style={{ backgroundColor: "#F0EBE3" }}>{leftCol}</div>}
-          {mobileTab === "fame" && <div className="p-5" style={{ backgroundColor: "#F0EBE3" }}>{rightCol}</div>}
+          {mobileTab === "main" && <div className="min-h-full px-5" style={{ backgroundColor: "var(--bg-main)" }}>{centerCol}</div>}
+          {mobileTab === "highlights" && <div className="p-5" style={{ backgroundColor: "var(--bg-side)" }}>{leftCol}</div>}
+          {mobileTab === "fame" && <div className="p-5" style={{ backgroundColor: "var(--bg-side)" }}>{rightCol}</div>}
         </div>
-        <nav className="fixed bottom-0 left-0 right-0 flex z-50" style={{ backgroundColor: "#FFFFFF", borderTop: "1px solid #E8E0D5" }}>
+        <nav className="fixed bottom-0 left-0 right-0 flex z-50" style={{ backgroundColor: "var(--bg-main)", borderTop: "1px solid var(--border)" }}>
           {([
             { key: "main" as const, icon: <HomeIcon />, label: "Main" },
             { key: "highlights" as const, icon: <HighlightsIcon />, label: "Highlights" },
