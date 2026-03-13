@@ -367,16 +367,16 @@ export default function Home() {
 
       <div className="py-14 px-6 text-center min-h-[200px] flex flex-col items-center justify-center flex-1">
         {data?.message ? (
-          <div key={animKey} className="animate-fade-in">
-            <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: data.message.tier === 2 ? "2rem" : "1.8rem", lineHeight: 1.7 }}>
-              {data.message.content}
+          <div key={animKey} className="animate-fade-in p-8" style={{ border: "2px solid #C17D3C", backgroundColor: "#FFFAF5" }}>
+            <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: data.message.tier === 2 ? "2rem" : "1.8rem", lineHeight: 1.7, color: "#1a1a1a" }}>
+              &ldquo;{data.message.content}&rdquo;
             </p>
-            <p className="mt-4" style={{ fontSize: "0.8rem", color: "#9A8F85", fontFamily: INTER }}>
+            <p className="mt-4" style={{ fontSize: "0.85rem", color: "#6b6360", fontFamily: INTER }}>
               — {data.message.username || "anonymous"}
             </p>
           </div>
         ) : (
-          <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.3rem", color: "#9A8F85" }}>
+          <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.3rem", color: "#6b6360" }}>
             No message yet. Be the first.
           </p>
         )}
