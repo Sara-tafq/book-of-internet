@@ -243,6 +243,9 @@ export default function Home() {
           <p className="text-xs leading-relaxed" style={{ fontFamily: INTER, color: "#1a1a1a" }}>
             Hi, I&apos;m Sara.<br />Having fun on the internet.
           </p>
+          <p className="text-xs italic leading-relaxed mt-2" style={{ fontFamily: FRAUNCES, color: "#C17D3C" }}>
+            &ldquo;My daily struggle is proving I am not AI&rdquo;
+          </p>
           <p className="text-xs leading-relaxed mt-2" style={{ fontFamily: INTER, color: "#9A8F85" }}>
             I run this place. You&apos;ll find me live on Twitch, TikTok and YouTube from time to time. You&apos;ll never know when tho.
           </p>
