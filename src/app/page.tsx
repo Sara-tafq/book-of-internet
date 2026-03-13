@@ -119,8 +119,6 @@ export default function Home() {
 
   const maxChars = tier === 1 ? 110 : 500;
   const price = tier === 1 ? 1 : 5;
-  const donationUrl = process.env.NEXT_PUBLIC_DONATION_URL || "#";
-
   useEffect(() => {
     try {
       const stored = localStorage.getItem("boi-liked");
@@ -254,16 +252,6 @@ export default function Home() {
             <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#1a1a1a" }}><YouTubeIcon /></a>
           </div>
         </div>
-      </div>
-
-      <div>
-        <SectionLabel>Support the Book</SectionLabel>
-        <a href={donationUrl} target="_blank" rel="noopener noreferrer"
-          className="block p-5 text-center transition-opacity hover:opacity-80"
-          style={{ backgroundColor: "#FFF3E0", border: "1px solid #C17D3C" }}>
-          <p className="text-sm mb-1" style={{ fontFamily: SPACE, fontWeight: 500, color: "#C17D3C" }}>Donate $3</p>
-          <p className="text-xs" style={{ fontFamily: INTER, color: "#9A8F85" }}>help keep the book alive. no message, just vibes.</p>
-        </a>
       </div>
 
       <div>
