@@ -118,7 +118,7 @@ export default function Home() {
   const [contactSent, setContactSent] = useState(false);
   const [contactLoading, setContactLoading] = useState(false);
 
-  const maxChars = tier === 1 ? 110 : 500;
+  const maxChars = tier === 1 ? 200 : 600;
   const price = tier === 1 ? 1 : 5;
   useEffect(() => {
     try {
@@ -421,18 +421,18 @@ export default function Home() {
       {!hasFreeSlot && (
         <div className="flex justify-center gap-3 mb-6">
           <button
-            onClick={() => { setTier(1); setContent((c) => c.slice(0, 110)); }}
+            onClick={() => { setTier(1); setContent((c) => c.slice(0, 200)); }}
             className="px-5 py-2 text-sm transition-all"
             style={{ borderRadius: 999, backgroundColor: tier === 1 ? "#C17D3C" : "transparent", color: tier === 1 ? "#fff" : "#1a1a1a", border: tier === 1 ? "1px solid #C17D3C" : "1px solid #1a1a1a", fontFamily: SPACE, fontWeight: 500 }}
           >
-            $1 · 110 chars
+            $1 · 200 chars
           </button>
           <button
             onClick={() => setTier(2)}
             className="px-5 py-2 text-sm transition-all"
             style={{ borderRadius: 999, backgroundColor: tier === 2 ? "#C17D3C" : "transparent", color: tier === 2 ? "#fff" : "#1a1a1a", border: tier === 2 ? "1px solid #C17D3C" : "1px solid #1a1a1a", fontFamily: SPACE, fontWeight: 500 }}
           >
-            $5 · 500 chars
+            $5 · 600 chars
           </button>
         </div>
       )}

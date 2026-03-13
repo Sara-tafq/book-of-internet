@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    if (content.length > 110) {
-      return NextResponse.json({ error: "Free messages are limited to 110 characters" }, { status: 400 });
+    if (content.length > 200) {
+      return NextResponse.json({ error: "Free messages are limited to 200 characters" }, { status: 400 });
     }
 
     const freeSlot = await prisma.freeSlot.findFirst({

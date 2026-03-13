@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     }
 
     const selectedTier = tier === 2 ? 2 : 1;
-    const maxChars = selectedTier === 1 ? 110 : 500;
+    const maxChars = selectedTier === 1 ? 200 : 600;
     const priceId =
       selectedTier === 1
         ? process.env.STRIPE_PRICE_ID_TIER1!
