@@ -61,7 +61,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const { id, field } = await req.json();
-    if (!id || !["saraPick", "hallOfFame"].includes(field)) {
+    if (!id || !["saraPick", "hallOfFame", "highlight"].includes(field)) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 

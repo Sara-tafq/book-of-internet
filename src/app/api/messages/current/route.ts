@@ -37,7 +37,7 @@ export async function GET() {
       }
     }
 
-    const [totalCount, freeSlot, hallOfFame, queueCount] = await Promise.all([
+    const [totalCount, freeSlot, hallOfFame, queueCount, saraPickMsg, highlights] = await Promise.all([
       prisma.message.count({
         where: { paid: true },
       }),
@@ -52,6 +52,16 @@ export async function GET() {
       }),
       prisma.message.count({
         where: { queued: true },
+      }),
+      prisma.message.findFirst({
+        where: { saraPick: true },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, content: true, username: true },
+      }),
+      prisma.message.findMany({
+        where: { highlight: true },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, content: true, username: true },
       }),
     ]);
 
@@ -85,6 +95,8 @@ export async function GET() {
       hallOfFame,
       queueCount,
       secondsLeft,
+      saraPick: saraPickMsg,
+      highlights,
     });
   } catch (error) {
     console.error("Error fetching current message:", error);

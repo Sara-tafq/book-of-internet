@@ -16,6 +16,7 @@ interface AdminMessage {
   likes: number;
   saraPick: boolean;
   hallOfFame: boolean;
+  highlight: boolean;
   createdAt: string;
 }
 
@@ -50,7 +51,7 @@ export default function AdminPage() {
     } catch { setError("Connection error"); }
   };
 
-  const toggle = async (id: string, field: "saraPick" | "hallOfFame") => {
+  const toggle = async (id: string, field: "saraPick" | "hallOfFame" | "highlight") => {
     setToggling(true);
     try {
       await fetch("/api/admin", {
@@ -150,6 +151,7 @@ export default function AdminPage() {
                 <td className="px-4 py-3 text-xs space-x-1">
                   {m.saraPick && <span className="inline-block px-1.5 py-0.5 text-[0.6rem]" style={{ backgroundColor: "#C17D3C", color: "#fff", borderRadius: 4 }}>Pick</span>}
                   {m.hallOfFame && <span className="inline-block px-1.5 py-0.5 text-[0.6rem]" style={{ backgroundColor: "#B8860B", color: "#fff", borderRadius: 4 }}>HoF</span>}
+                  {m.highlight && <span className="inline-block px-1.5 py-0.5 text-[0.6rem]" style={{ backgroundColor: "#6b6360", color: "#fff", borderRadius: 4 }}>HL</span>}
                 </td>
                 <td className="px-4 py-3 text-xs" style={{ color: "#9A8F85" }}>{new Date(m.createdAt).toLocaleString()}</td>
               </tr>
@@ -189,6 +191,19 @@ export default function AdminPage() {
                 fontWeight: 500,
               }}>
               {data?.messages.find((m) => m.id === selectedId)?.hallOfFame ? "Remove Hall of Fame" : "Add Hall of Fame"}
+            </button>
+            <button
+              disabled={toggling}
+              onClick={() => toggle(selectedId, "highlight")}
+              className="px-4 py-2 text-xs transition-opacity hover:opacity-80 disabled:opacity-50"
+              style={{
+                backgroundColor: data?.messages.find((m) => m.id === selectedId)?.highlight ? "#6b6360" : "transparent",
+                color: data?.messages.find((m) => m.id === selectedId)?.highlight ? "#fff" : "#6b6360",
+                border: "1px solid #6b6360",
+                fontFamily: SPACE,
+                fontWeight: 500,
+              }}>
+              {data?.messages.find((m) => m.id === selectedId)?.highlight ? "Remove Highlight" : "Add Highlight"}
             </button>
           </div>
         </div>

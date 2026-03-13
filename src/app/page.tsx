@@ -17,6 +17,12 @@ interface FreeSlotData {
   minutesLeft: number;
 }
 
+interface PickData {
+  id: string;
+  content: string;
+  username: string | null;
+}
+
 interface CurrentData {
   message: MessageData | null;
   totalCount: number;
@@ -24,22 +30,9 @@ interface CurrentData {
   hallOfFame: MessageData[];
   queueCount: number;
   secondsLeft: number | null;
+  saraPick: PickData | null;
+  highlights: PickData[];
 }
-
-const FIRST_WRITER = {
-  content: "This is the beginning. You don't know me. I don't know you. But we're both here, at the same strange place on the internet, at the same strange time. Write something. Make it count. Once upon a time, oops, too cheesy. I'll let you start the book.",
-  username: "Sara",
-};
-
-const SARAS_CHOICE = {
-  content: "The internet is just people pretending to be confident.",
-};
-
-const HIGHLIGHTS = [
-  { content: "I was here before AI took over. Remember me." },
-  { content: "Mom, I made it into a book." },
-  { content: "Be kind to strangers. They might be writing about you." },
-];
 
 const FRAUNCES = "var(--font-fraunces)";
 const SPACE = "var(--font-space)";
@@ -235,23 +228,33 @@ export default function Home() {
         <SectionLabel>
           <span className="inline-flex items-center gap-1.5"><StarIcon /> Sara&apos;s Choice</span>
         </SectionLabel>
-        <div className="p-5" style={{ backgroundColor: "#FFF3E0", borderLeft: "4px solid #C17D3C" }}>
-          <p className="italic text-sm leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400 }}>
-            &ldquo;{SARAS_CHOICE.content}&rdquo;
-          </p>
-        </div>
+        {data?.saraPick ? (
+          <div className="p-5" style={{ backgroundColor: "#FFF3E0", borderLeft: "4px solid #C17D3C" }}>
+            <p className="italic text-sm leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400 }}>
+              &ldquo;{data.saraPick.content}&rdquo;
+            </p>
+          </div>
+        ) : (
+          <div className="p-5" style={{ backgroundColor: "#FAF6F1" }}>
+            <p className="italic text-xs" style={{ color: "#9A8F85", fontFamily: FRAUNCES }}>no pick yet.</p>
+          </div>
+        )}
       </div>
 
       <div>
         <SectionLabel>Highlights</SectionLabel>
         <div className="flex flex-col gap-3">
-          {HIGHLIGHTS.map((h, i) => (
-            <div key={i} className="p-4" style={{ backgroundColor: "#FAF6F1" }}>
-              <p className="italic text-xs leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400, color: "#1a1a1a" }}>
-                &ldquo;{h.content}&rdquo;
-              </p>
-            </div>
-          ))}
+          {data?.highlights && data.highlights.length > 0 ? (
+            data.highlights.map((h) => (
+              <div key={h.id} className="p-4" style={{ backgroundColor: "#FAF6F1" }}>
+                <p className="italic text-xs leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400, color: "#1a1a1a" }}>
+                  &ldquo;{h.content}&rdquo;
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="text-xs" style={{ color: "#9A8F85", fontFamily: INTER }}>no highlights yet.</p>
+          )}
         </div>
       </div>
 
@@ -318,9 +321,9 @@ export default function Home() {
           <span className="uppercase" style={{ fontSize: "0.6rem", letterSpacing: "0.1em", color: "#C17D3C", fontFamily: SPACE, fontWeight: 500 }}>First Writer</span>
         </div>
         <p className="text-xs leading-relaxed italic" style={{ fontFamily: FRAUNCES, color: "#1a1a1a" }}>
-          &ldquo;{FIRST_WRITER.content}&rdquo;
+          &ldquo;This is the beginning. You don&apos;t know me. I don&apos;t know you. But we&apos;re both here, at the same strange place on the internet, at the same strange time. Write something. Make it count. Once upon a time, oops, too cheesy. I&apos;ll let you start the book.&rdquo;
         </p>
-        <p className="mt-2" style={{ fontSize: "0.65rem", color: "#C17D3C", fontFamily: INTER }}>— {FIRST_WRITER.username}</p>
+        <p className="mt-2" style={{ fontSize: "0.65rem", color: "#C17D3C", fontFamily: INTER }}>— Sara</p>
       </div>
 
       <div className="flex flex-col gap-3">
