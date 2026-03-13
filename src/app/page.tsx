@@ -449,10 +449,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="flex-1 hidden md:grid mx-auto w-full" style={{ gridTemplateColumns: "1fr 2fr 1fr", maxWidth: 1200 }}>
-        <aside className="p-6" style={{ backgroundColor: "#F0EBE3" }}>{leftCol}</aside>
-        <main className="px-10" style={{ backgroundColor: "#FFFFFF", boxShadow: "0 0 40px rgba(0,0,0,0.04)" }}>{centerCol}</main>
-        <aside className="p-6" style={{ backgroundColor: "#F0EBE3" }}>{rightCol}</aside>
+      <div className="flex-1 hidden md:grid w-full" style={{ gridTemplateColumns: "1fr 2.5fr 1fr" }}>
+        <aside className="p-8" style={{ backgroundColor: "#F0EBE3" }}>{leftCol}</aside>
+        <main className="px-14" style={{ backgroundColor: "#FFFFFF", boxShadow: "0 0 40px rgba(0,0,0,0.04)" }}>{centerCol}</main>
+        <aside className="p-8" style={{ backgroundColor: "#F0EBE3" }}>{rightCol}</aside>
       </div>
 
       <div className="flex-1 md:hidden flex flex-col pb-16">
