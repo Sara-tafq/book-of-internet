@@ -360,7 +360,7 @@ export default function Home() {
       </header>
 
       <p className="text-center italic px-4 mt-3 mb-6" style={{ color: "#4a4540", fontFamily: FRAUNCES, fontWeight: 300, fontSize: "0.95rem" }}>
-        you pay $1. your message lives here. someone pays after you, you&apos;re gone. but we keep everything. one day it becomes a book. no pressure tho.
+        This is the beginning. You don&apos;t know me. I don&apos;t know you. But we&apos;re both here, at the same strange place on the internet, at the same strange time. Write something. Make it count. Once upon a time, oops, too cheesy. I&apos;ll let you start the book.
       </p>
 
       <p className="text-center text-sm mb-2" style={{ color: "#6b6360", fontFamily: SPACE, fontWeight: 500 }}>
