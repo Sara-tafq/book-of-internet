@@ -24,7 +24,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "The Book of Internet",
   description:
-    "One dollar. One message. One second of fame. Then you're gone — but never forgotten.",
+    "This is the beginning. You don't know me. I don't know you. But we're both here, at the same strange place on the internet, at the same strange time. Write something. Make it count. Once upon a time, oops, too cheesy. I'll let you start the book.",
 };
 
 export default function RootLayout({
