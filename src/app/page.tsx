@@ -111,6 +111,7 @@ export default function Home() {
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
   const [bouncingId, setBouncingId] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<"main" | "highlights" | "fame">("main");
+  const [elapsed, setElapsed] = useState(0);
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMsg, setContactMsg] = useState("");
@@ -143,6 +144,26 @@ export default function Home() {
     const interval = setInterval(fetchCurrent, 3000);
     return () => clearInterval(interval);
   }, [fetchCurrent]);
+
+  useEffect(() => {
+    if (!data?.message?.createdAt) { setElapsed(0); return; }
+    const created = new Date(data.message.createdAt).getTime();
+    const tick = () => setElapsed(Math.floor((Date.now() - created) / 1000));
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [data?.message?.createdAt]);
+
+  const formatElapsed = (s: number) => {
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (d > 0) return `${d}d ${h}h ${m}m`;
+    if (h > 0) return `${h}h ${m}m ${sec}s`;
+    if (m > 0) return `${m}m ${sec}s`;
+    return `${sec}s`;
+  };
 
   const handlePaidSubmit = async () => {
     if (!content.trim() || loading) return;
@@ -374,6 +395,9 @@ export default function Home() {
             </p>
             <p className="mt-4" style={{ fontSize: "0.85rem", color: "#6b6360", fontFamily: INTER }}>
               — {data.message.username || "anonymous"}
+            </p>
+            <p className="mt-3" style={{ fontSize: "0.75rem", color: "#C17D3C", fontFamily: SPACE, fontWeight: 500 }}>
+              this message has been here for {formatElapsed(elapsed)}
             </p>
           </div>
         ) : (
