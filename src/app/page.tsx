@@ -118,7 +118,7 @@ export default function Home() {
   const [contactSent, setContactSent] = useState(false);
   const [contactLoading, setContactLoading] = useState(false);
 
-  const maxChars = tier === 1 ? 200 : 600;
+  const maxChars = tier === 1 ? 200 : 1200;
   const price = tier === 1 ? 1 : 5;
   useEffect(() => {
     try {
@@ -432,7 +432,7 @@ export default function Home() {
             className="px-5 py-2 text-sm transition-all"
             style={{ borderRadius: 999, backgroundColor: tier === 2 ? "#C17D3C" : "transparent", color: tier === 2 ? "#fff" : "#1a1a1a", border: tier === 2 ? "1px solid #C17D3C" : "1px solid #1a1a1a", fontFamily: SPACE, fontWeight: 500 }}
           >
-            $5 · 600 chars
+            $5 · 1200 chars
           </button>
         </div>
       )}

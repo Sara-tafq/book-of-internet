@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { rateLimit, getIP } from "@/lib/rate-limit";
+import { stripHtml } from "@/lib/sanitize";
 
 export async function POST(req: NextRequest) {
+  const ip = getIP(req);
+  const limit = rateLimit(`free:${ip}`, 3, 3600_000);
+  if (!limit.ok) {
+    return NextResponse.json({ error: "Too many requests. Try again later." }, { status: 429 });
+  }
+
   try {
     const { content, username } = await req.json();
 
@@ -9,8 +17,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    if (content.length > 200) {
-      return NextResponse.json({ error: "Free messages are limited to 200 characters" }, { status: 400 });
+    const sanitizedContent = stripHtml(content).slice(0, 200);
+    const sanitizedUsername = username ? stripHtml(username).slice(0, 30) : null;
+
+    if (sanitizedContent.length === 0) {
+      return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
     const freeSlot = await prisma.freeSlot.findFirst({
@@ -33,7 +44,6 @@ export async function POST(req: NextRequest) {
       Date.now() - activeMsg.activatedAt.getTime() < 30000;
 
     if (isActiveRecent) {
-      // Queue the free message
       await prisma.$transaction([
         prisma.freeSlot.update({
           where: { id: freeSlot.id },
@@ -41,8 +51,8 @@ export async function POST(req: NextRequest) {
         }),
         prisma.message.create({
           data: {
-            content: content.trim(),
-            username: username?.trim() || null,
+            content: sanitizedContent,
+            username: sanitizedUsername,
             paid: true,
             queued: true,
             free: true,
@@ -51,7 +61,6 @@ export async function POST(req: NextRequest) {
         }),
       ]);
     } else {
-      // Activate immediately
       await prisma.$transaction([
         prisma.freeSlot.update({
           where: { id: freeSlot.id },
@@ -63,8 +72,8 @@ export async function POST(req: NextRequest) {
         }),
         prisma.message.create({
           data: {
-            content: content.trim(),
-            username: username?.trim() || null,
+            content: sanitizedContent,
+            username: sanitizedUsername,
             paid: true,
             active: true,
             free: true,
@@ -76,8 +85,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error creating free message:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 }
