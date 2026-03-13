@@ -330,18 +330,18 @@ export default function Home() {
   const centerCol = (
     <div className="flex flex-col min-h-full">
       <header className="pt-10 pb-3 text-center">
-        <h1 className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.5rem", letterSpacing: "0.15em" }}>
+        <h1 className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: "2.5rem", letterSpacing: "0.1em", color: "#1a1a1a" }}>
           The Book of Internet
         </h1>
       </header>
 
-      <p className="text-center text-xs italic leading-relaxed px-4 mt-2 mb-6" style={{ color: "#9A8F85", fontFamily: FRAUNCES, fontWeight: 300 }}>
+      <p className="text-center italic leading-relaxed px-4 mt-3 mb-8" style={{ color: "#4a4540", fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.05rem", lineHeight: 1.8 }}>
         you pay $1. your message lives here. someone pays after you, you&apos;re gone.<br />
         but we keep everything. one day it becomes a book.<br />
         no pressure tho.
       </p>
 
-      <p className="text-center text-xs mb-2" style={{ color: "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>
+      <p className="text-center text-sm mb-2" style={{ color: "#6b6360", fontFamily: SPACE, fontWeight: 500 }}>
         {data?.totalCount ?? 0} message{(data?.totalCount ?? 0) !== 1 ? "s" : ""} in the book
       </p>
 
@@ -352,7 +352,7 @@ export default function Home() {
       )}
 
       {(data?.queueCount ?? 0) > 0 && (
-        <p className="text-center text-xs mb-2" style={{ color: "#9A8F85", fontFamily: INTER, fontStyle: "italic" }}>
+        <p className="text-center text-sm mb-2" style={{ color: "#6b6360", fontFamily: INTER, fontStyle: "italic" }}>
           {data!.queueCount} message{data!.queueCount !== 1 ? "s" : ""} waiting in queue
         </p>
       )}
