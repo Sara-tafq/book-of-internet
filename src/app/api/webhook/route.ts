@@ -27,16 +27,35 @@ export async function POST(req: NextRequest) {
     });
 
     if (message) {
-      await prisma.$transaction([
-        prisma.message.updateMany({
-          where: { active: true },
-          data: { active: false },
-        }),
-        prisma.message.update({
+      // Check if current active message is less than 30s old
+      const activeMsg = await prisma.message.findFirst({
+        where: { active: true },
+        select: { activatedAt: true },
+      });
+
+      const isActiveRecent =
+        activeMsg?.activatedAt &&
+        Date.now() - activeMsg.activatedAt.getTime() < 30000;
+
+      if (isActiveRecent) {
+        // Queue the new message instead of activating it
+        await prisma.message.update({
           where: { id: message.id },
-          data: { paid: true, active: true },
-        }),
-      ]);
+          data: { paid: true, queued: true },
+        });
+      } else {
+        // Activate immediately
+        await prisma.$transaction([
+          prisma.message.updateMany({
+            where: { active: true },
+            data: { active: false },
+          }),
+          prisma.message.update({
+            where: { id: message.id },
+            data: { paid: true, active: true, activatedAt: new Date() },
+          }),
+        ]);
+      }
 
       // Free slot: triggered randomly between 30th and 50th paid message
       const paidCount = await prisma.message.count({

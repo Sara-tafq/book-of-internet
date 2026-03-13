@@ -10,10 +10,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const messages = await prisma.message.findMany({
-    where: { paid: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const [messages, contactMessages] = await Promise.all([
+    prisma.message.findMany({
+      where: { paid: true },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.contactMessage.findMany({
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
 
   const totalRevenue = messages
     .filter((m) => !m.free)
@@ -24,5 +29,6 @@ export async function GET(req: NextRequest) {
     messages,
     totalRevenue,
     totalFree,
+    contactMessages,
   });
 }

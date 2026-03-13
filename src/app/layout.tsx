@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans } from "next/font/google";
+import { Inter, Fraunces, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const syne = Syne({
-  variable: "--font-syne",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "700", "800"],
+  weight: ["300", "400", "500"],
 });
 
-const dmSans = DM_Sans({
-  variable: "--font-dm",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -28,11 +35,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${syne.variable} ${dmSans.variable} antialiased min-h-screen`}
+        className={`${inter.variable} ${fraunces.variable} ${spaceGrotesk.variable} antialiased min-h-screen`}
         style={{
-          fontFamily: "var(--font-dm), system-ui, sans-serif",
-          backgroundColor: "#2C2B30",
-          color: "#FFFFFF",
+          fontFamily: "var(--font-inter), system-ui, sans-serif",
+          backgroundColor: "#F7F3EE",
+          color: "#1a1a1a",
         }}
       >
         {children}

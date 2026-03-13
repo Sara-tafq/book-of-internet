@@ -22,6 +22,8 @@ interface CurrentData {
   totalCount: number;
   freeSlot: FreeSlotData | null;
   hallOfFame: MessageData[];
+  queueCount: number;
+  secondsLeft: number | null;
 }
 
 const FIRST_WRITER = {
@@ -29,7 +31,7 @@ const FIRST_WRITER = {
   username: "Sara",
 };
 
-const SARAS_PICK = {
+const SARAS_CHOICE = {
   content: "The internet is just people pretending to be confident.",
 };
 
@@ -39,12 +41,13 @@ const HIGHLIGHTS = [
   { content: "Be kind to strangers. They might be writing about you." },
 ];
 
-const SYNE = "var(--font-syne)";
-const DM = "var(--font-dm)";
+const FRAUNCES = "var(--font-fraunces)";
+const SPACE = "var(--font-space)";
+const INTER = "var(--font-inter)";
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? "#F58F7C" : "none"} stroke={filled ? "#F58F7C" : "currentColor"} strokeWidth="1.5">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? "#C17D3C" : "none"} stroke={filled ? "#C17D3C" : "currentColor"} strokeWidth="1.5">
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
     </svg>
   );
@@ -52,20 +55,21 @@ function HeartIcon({ filled }: { filled: boolean }) {
 
 function StarIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="#F2C4CE" stroke="none">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
 }
 
-function TwitchIcon() {
-  return <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>;
-}
-function TikTokIcon() {
-  return <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z"/></svg>;
-}
-function YouTubeIcon() {
-  return <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>;
+function TrophyIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+      <path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+    </svg>
+  );
 }
 
 function HomeIcon() {
@@ -78,9 +82,19 @@ function FameIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>;
 }
 
-function Label({ children }: { children: React.ReactNode }) {
+function TwitchIcon() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>;
+}
+function TikTokIcon() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z"/></svg>;
+}
+function YouTubeIcon() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>;
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-center uppercase mb-4" style={{ fontSize: "0.7rem", letterSpacing: "0.15em", color: "#D6D6D6", fontFamily: SYNE, fontWeight: 700 }}>
+    <p className="text-center uppercase mb-5" style={{ fontSize: "0.7rem", letterSpacing: "0.15em", color: "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>
       {children}
     </p>
   );
@@ -97,9 +111,15 @@ export default function Home() {
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
   const [bouncingId, setBouncingId] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<"main" | "highlights" | "fame">("main");
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMsg, setContactMsg] = useState("");
+  const [contactSent, setContactSent] = useState(false);
+  const [contactLoading, setContactLoading] = useState(false);
 
   const maxChars = tier === 1 ? 110 : 500;
   const price = tier === 1 ? 1 : 5;
+  const donationUrl = process.env.NEXT_PUBLIC_DONATION_URL || "#";
 
   useEffect(() => {
     try {
@@ -174,25 +194,41 @@ export default function Home() {
     } catch (err) { console.error("Like error:", err); }
   };
 
+  const handleContact = async () => {
+    if (!contactMsg.trim() || contactLoading) return;
+    setContactLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: contactName.trim() || null, email: contactEmail.trim() || null, message: contactMsg.trim() }),
+      });
+      if (res.ok) { setContactSent(true); setContactName(""); setContactEmail(""); setContactMsg(""); }
+    } catch (err) { console.error("Contact error:", err); }
+    finally { setContactLoading(false); }
+  };
+
   const hasFreeSlot = data?.freeSlot?.active ?? false;
 
   const leftCol = (
-    <div className="flex flex-col gap-5 h-full animate-col-left">
+    <div className="flex flex-col gap-6 h-full">
       <div>
-        <Label>sara picked this one</Label>
-        <div className="p-5 card-hover" style={{ backgroundColor: "#3A3A3D", borderLeft: "4px solid #F58F7C", borderRadius: 16 }}>
-          <p className="text-sm leading-relaxed italic" style={{ fontFamily: DM, color: "#FFFFFF" }}>
-            &ldquo;{SARAS_PICK.content}&rdquo;
+        <SectionLabel>
+          <span className="inline-flex items-center gap-1.5"><StarIcon /> Sara&apos;s Choice</span>
+        </SectionLabel>
+        <div className="p-5" style={{ backgroundColor: "#FFF3E0", borderLeft: "4px solid #C17D3C" }}>
+          <p className="italic text-sm leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400 }}>
+            &ldquo;{SARAS_CHOICE.content}&rdquo;
           </p>
         </div>
       </div>
 
       <div>
-        <Label>pages from the book</Label>
+        <SectionLabel>Highlights</SectionLabel>
         <div className="flex flex-col gap-3">
           {HIGHLIGHTS.map((h, i) => (
-            <div key={i} className="p-4 card-hover" style={{ backgroundColor: "#3A3A3D", borderRadius: 16 }}>
-              <p className="text-xs leading-relaxed italic" style={{ fontFamily: DM, color: "#D6D6D6" }}>
+            <div key={i} className="p-4" style={{ backgroundColor: "#FAF6F1" }}>
+              <p className="italic text-xs leading-relaxed" style={{ fontFamily: FRAUNCES, fontWeight: 400, color: "#1a1a1a" }}>
                 &ldquo;{h.content}&rdquo;
               </p>
             </div>
@@ -200,44 +236,79 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mt-auto pt-4">
-        <div className="p-5" style={{ backgroundColor: "#3A3A3D", borderRadius: 16 }}>
+      <div className="mt-auto pt-6">
+        <div className="p-5" style={{ backgroundColor: "#FAF6F1" }}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 flex items-center justify-center text-xs" style={{ borderRadius: "50%", backgroundColor: "#F58F7C", color: "#2C2B30", fontFamily: SYNE, fontWeight: 700 }}>S</div>
-            <span className="text-sm" style={{ fontFamily: SYNE, fontWeight: 700 }}>Sara</span>
+            <div className="w-8 h-8 flex items-center justify-center text-xs" style={{ borderRadius: "50%", backgroundColor: "#C17D3C", color: "#fff", fontFamily: SPACE, fontWeight: 500 }}>S</div>
+            <span className="text-sm" style={{ fontFamily: SPACE, fontWeight: 500 }}>Sara</span>
           </div>
-          <p className="text-xs leading-relaxed" style={{ fontFamily: DM }}>
+          <p className="text-xs leading-relaxed" style={{ fontFamily: INTER, color: "#1a1a1a" }}>
             Hi, I&apos;m Sara.<br />Having fun on the internet.
           </p>
-          <p className="text-xs leading-relaxed mt-2" style={{ fontFamily: DM, color: "#D6D6D6" }}>
+          <p className="text-xs leading-relaxed mt-2" style={{ fontFamily: INTER, color: "#9A8F85" }}>
             I run this place. You&apos;ll find me live on Twitch, TikTok and YouTube from time to time. You&apos;ll never know when tho.
           </p>
           <div className="flex gap-4 mt-4">
-            <a href="https://twitch.tv" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#F58F7C" }}><TwitchIcon /></a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#F58F7C" }}><TikTokIcon /></a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#F58F7C" }}><YouTubeIcon /></a>
+            <a href="https://twitch.tv" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#1a1a1a" }}><TwitchIcon /></a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#1a1a1a" }}><TikTokIcon /></a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity" style={{ color: "#1a1a1a" }}><YouTubeIcon /></a>
           </div>
         </div>
-        <p className="text-center mt-4 italic" style={{ fontSize: "0.65rem", color: "#6B6B6E", fontFamily: DM }}>
-          &ldquo;my daily struggle: proving to people I am not AI&rdquo;
-        </p>
+      </div>
+
+      <div>
+        <SectionLabel>Support the Book</SectionLabel>
+        <a href={donationUrl} target="_blank" rel="noopener noreferrer"
+          className="block p-5 text-center transition-opacity hover:opacity-80"
+          style={{ backgroundColor: "#FFF3E0", border: "1px solid #C17D3C" }}>
+          <p className="text-sm mb-1" style={{ fontFamily: SPACE, fontWeight: 500, color: "#C17D3C" }}>Donate $3</p>
+          <p className="text-xs" style={{ fontFamily: INTER, color: "#9A8F85" }}>help keep the book alive. no message, just vibes.</p>
+        </a>
+      </div>
+
+      <div>
+        <SectionLabel>Contact Sara</SectionLabel>
+        <div className="p-5" style={{ backgroundColor: "#FAF6F1" }}>
+          {contactSent ? (
+            <p className="text-xs text-center" style={{ fontFamily: INTER, color: "#C17D3C" }}>sent! i&apos;ll read it, promise.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value.slice(0, 50))} placeholder="name (optional)"
+                className="w-full px-3 py-2 text-xs focus:outline-none"
+                style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }} />
+              <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value.slice(0, 100))} placeholder="email (optional)"
+                className="w-full px-3 py-2 text-xs focus:outline-none"
+                style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }} />
+              <textarea value={contactMsg} onChange={(e) => setContactMsg(e.target.value.slice(0, 1000))} placeholder="your message..."
+                rows={3} className="w-full px-3 py-2 text-xs resize-none focus:outline-none"
+                style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }} />
+              <button onClick={handleContact} disabled={!contactMsg.trim() || contactLoading}
+                className="w-full py-2 text-xs disabled:opacity-30 transition-opacity hover:opacity-80"
+                style={{ backgroundColor: "#C17D3C", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
+                {contactLoading ? "sending..." : "send"}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 
   const rightCol = (
-    <div className="animate-col-right">
-      <Label>the ones that hit different</Label>
+    <div>
+      <SectionLabel>
+        <span className="inline-flex items-center gap-1.5"><TrophyIcon /> Hall of Fame</span>
+      </SectionLabel>
 
-      <div className="p-4 mb-3 card-hover" style={{ backgroundColor: "#3A3A3D", borderRadius: 16, border: "1px solid #F2C4CE" }}>
+      <div className="p-4 mb-3" style={{ backgroundColor: "#FFF8F0", border: "1px solid #E8E0D5" }}>
         <div className="flex items-center gap-1.5 mb-2">
           <StarIcon />
-          <span className="uppercase" style={{ fontSize: "0.6rem", letterSpacing: "0.1em", color: "#F2C4CE", fontFamily: SYNE, fontWeight: 700 }}>First Writer</span>
+          <span className="uppercase" style={{ fontSize: "0.6rem", letterSpacing: "0.1em", color: "#C17D3C", fontFamily: SPACE, fontWeight: 500 }}>First Writer</span>
         </div>
-        <p className="text-xs leading-relaxed italic" style={{ fontFamily: DM, color: "#D6D6D6" }}>
+        <p className="text-xs leading-relaxed italic" style={{ fontFamily: FRAUNCES, color: "#1a1a1a" }}>
           &ldquo;{FIRST_WRITER.content}&rdquo;
         </p>
-        <p className="mt-2" style={{ fontSize: "0.65rem", color: "#F2C4CE", fontFamily: DM }}>— {FIRST_WRITER.username}</p>
+        <p className="mt-2" style={{ fontSize: "0.65rem", color: "#C17D3C", fontFamily: INTER }}>— {FIRST_WRITER.username}</p>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -245,15 +316,15 @@ export default function Home() {
           data.hallOfFame.map((msg) => {
             const isLiked = likedIds.has(msg.id);
             return (
-              <div key={msg.id} className="p-4 flex flex-col card-hover" style={{ backgroundColor: "#3A3A3D", borderRadius: 16 }}>
-                <p className="text-sm leading-relaxed italic mb-1" style={{ fontFamily: DM }}>
+              <div key={msg.id} className="p-4 flex flex-col" style={{ backgroundColor: "#FFF8F0" }}>
+                <p className="italic text-sm leading-relaxed mb-1" style={{ fontFamily: FRAUNCES, fontWeight: 400 }}>
                   &ldquo;{msg.content}&rdquo;
                 </p>
-                <p className="mb-3" style={{ fontSize: "0.65rem", color: "#D6D6D6", fontFamily: DM }}>— {msg.username || "anonymous"}</p>
+                <p className="mb-3" style={{ fontSize: "0.65rem", color: "#9A8F85", fontFamily: INTER }}>— {msg.username || "anonymous"}</p>
                 <button
                   onClick={() => handleLike(msg.id)}
                   className={`self-start text-xs flex items-center gap-1.5 transition-colors ${bouncingId === msg.id ? "animate-like-bounce" : ""}`}
-                  style={{ color: isLiked ? "#F58F7C" : "#D6D6D6", cursor: isLiked ? "default" : "pointer", fontFamily: SYNE, fontWeight: 700 }}
+                  style={{ color: isLiked ? "#C17D3C" : "#9A8F85", cursor: isLiked ? "default" : "pointer", fontFamily: SPACE, fontWeight: 500 }}
                 >
                   <HeartIcon filled={isLiked} />
                   {msg.likes}
@@ -262,56 +333,68 @@ export default function Home() {
             );
           })
         ) : (
-          <p className="text-xs text-center" style={{ color: "#6B6B6E", fontFamily: DM }}>No messages yet.</p>
+          <p className="text-xs text-center" style={{ color: "#9A8F85", fontFamily: INTER }}>No messages yet.</p>
         )}
       </div>
     </div>
   );
 
   const centerCol = (
-    <div className="flex flex-col min-h-full animate-col-center">
-      <header className="pt-10 pb-2 text-center">
-        <h1 style={{ fontFamily: SYNE, fontWeight: 800, fontSize: "1.8rem", color: "#F2C4CE" }}>
+    <div className="flex flex-col min-h-full">
+      <header className="pt-10 pb-3 text-center">
+        <h1 className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.5rem", letterSpacing: "0.15em" }}>
           The Book of Internet
         </h1>
       </header>
 
-      <p className="text-center text-xs italic leading-relaxed px-4 mt-2 mb-6" style={{ color: "#D6D6D6", fontFamily: DM, fontWeight: 400 }}>
+      <p className="text-center text-xs italic leading-relaxed px-4 mt-2 mb-6" style={{ color: "#9A8F85", fontFamily: FRAUNCES, fontWeight: 300 }}>
         you pay $1. your message lives here. someone pays after you, you&apos;re gone.<br />
         but we keep everything. one day it becomes a book.<br />
         no pressure tho.
       </p>
 
-      <p className="text-center text-xs mb-6" style={{ color: "#D6D6D6", fontFamily: SYNE, fontWeight: 700 }}>
+      <p className="text-center text-xs mb-2" style={{ color: "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>
         {data?.totalCount ?? 0} message{(data?.totalCount ?? 0) !== 1 ? "s" : ""} in the book
       </p>
 
-      <div style={{ borderTop: "1px solid #4F4F51" }} />
+      {data?.message && data.secondsLeft !== null && data.secondsLeft > 0 && (
+        <p className="text-center text-xs mb-1" style={{ color: "#C17D3C", fontFamily: SPACE, fontWeight: 500 }}>
+          live for {data.secondsLeft}s more
+        </p>
+      )}
+
+      {(data?.queueCount ?? 0) > 0 && (
+        <p className="text-center text-xs mb-2" style={{ color: "#9A8F85", fontFamily: INTER, fontStyle: "italic" }}>
+          {data!.queueCount} message{data!.queueCount !== 1 ? "s" : ""} waiting in queue
+        </p>
+      )}
+
+      <div className="border-t mt-2" style={{ borderColor: "#E8E0D5" }} />
 
       {hasFreeSlot && (
-        <div className="animate-pulse-banner py-3 px-6 text-center text-sm" style={{ backgroundColor: "rgba(245,143,124,0.15)", color: "#F58F7C", fontFamily: SYNE, fontWeight: 700, borderRadius: 12, margin: "12px 0" }}>
-          free real estate — post for free, {data!.freeSlot!.minutesLeft} minute{data!.freeSlot!.minutesLeft !== 1 ? "s" : ""} left
+        <div className="animate-pulse-gold py-3 px-6 text-center text-sm" style={{ backgroundColor: "#FFF3CD", color: "#B8860B", fontFamily: SPACE, fontWeight: 500 }}>
+          free slot unlocked — post for free, {data!.freeSlot!.minutesLeft} minute{data!.freeSlot!.minutesLeft !== 1 ? "s" : ""} left
         </div>
       )}
 
-      <div className="py-12 px-6 text-center min-h-[200px] flex flex-col items-center justify-center flex-1">
+      <div className="py-14 px-6 text-center min-h-[200px] flex flex-col items-center justify-center flex-1">
         {data?.message ? (
-          <div key={animKey} className="animate-msg-in">
-            <p style={{ fontFamily: DM, fontWeight: data.message.tier === 2 ? 700 : 500, fontSize: "1.8rem", lineHeight: 1.7 }}>
+          <div key={animKey} className="animate-fade-in">
+            <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 400, fontSize: data.message.tier === 2 ? "2rem" : "1.8rem", lineHeight: 1.7 }}>
               {data.message.content}
             </p>
-            <p className="mt-4" style={{ fontSize: "0.8rem", color: "#D6D6D6", fontFamily: DM }}>
+            <p className="mt-4" style={{ fontSize: "0.8rem", color: "#9A8F85", fontFamily: INTER }}>
               — {data.message.username || "anonymous"}
             </p>
           </div>
         ) : (
-          <p className="italic" style={{ fontFamily: DM, fontSize: "1.2rem", color: "#6B6B6E" }}>
+          <p className="italic" style={{ fontFamily: FRAUNCES, fontWeight: 300, fontSize: "1.3rem", color: "#9A8F85" }}>
             No message yet. Be the first.
           </p>
         )}
       </div>
 
-      <div style={{ borderTop: "1px solid #4F4F51" }} className="mb-8" />
+      <div className="border-t mb-8" style={{ borderColor: "#E8E0D5" }} />
 
       <input
         type="text"
@@ -319,22 +402,22 @@ export default function Home() {
         onChange={(e) => setUsername(e.target.value.slice(0, 30))}
         placeholder="your name (optional, anonymous by default)"
         className="w-full px-4 py-3 text-sm mb-4 focus:outline-none transition"
-        style={{ backgroundColor: "#2C2B30", border: "1px solid #4F4F51", borderRadius: 12, color: "#FFFFFF", fontFamily: DM }}
+        style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }}
       />
 
       {!hasFreeSlot && (
-        <div className="flex justify-center gap-3 mb-4">
+        <div className="flex justify-center gap-3 mb-6">
           <button
             onClick={() => { setTier(1); setContent((c) => c.slice(0, 110)); }}
             className="px-5 py-2 text-sm transition-all"
-            style={{ borderRadius: 999, backgroundColor: tier === 1 ? "#F58F7C" : "transparent", color: tier === 1 ? "#2C2B30" : "#FFFFFF", border: tier === 1 ? "1px solid #F58F7C" : "1px solid #4F4F51", fontFamily: SYNE, fontWeight: 700 }}
+            style={{ borderRadius: 999, backgroundColor: tier === 1 ? "#C17D3C" : "transparent", color: tier === 1 ? "#fff" : "#1a1a1a", border: tier === 1 ? "1px solid #C17D3C" : "1px solid #1a1a1a", fontFamily: SPACE, fontWeight: 500 }}
           >
             $1 · 110 chars
           </button>
           <button
             onClick={() => setTier(2)}
             className="px-5 py-2 text-sm transition-all"
-            style={{ borderRadius: 999, backgroundColor: tier === 2 ? "#F58F7C" : "transparent", color: tier === 2 ? "#2C2B30" : "#FFFFFF", border: tier === 2 ? "1px solid #F58F7C" : "1px solid #4F4F51", fontFamily: SYNE, fontWeight: 700 }}
+            style={{ borderRadius: 999, backgroundColor: tier === 2 ? "#C17D3C" : "transparent", color: tier === 2 ? "#fff" : "#1a1a1a", border: tier === 2 ? "1px solid #C17D3C" : "1px solid #1a1a1a", fontFamily: SPACE, fontWeight: 500 }}
           >
             $5 · 500 chars
           </button>
@@ -348,30 +431,30 @@ export default function Home() {
           placeholder="Write your message..."
           rows={4}
           className="w-full px-4 py-4 text-sm resize-none focus:outline-none transition"
-          style={{ backgroundColor: "#2C2B30", border: "1px solid #4F4F51", borderRadius: 12, color: "#FFFFFF", fontFamily: DM }}
+          style={{ border: "1px solid #E8E0D5", backgroundColor: "transparent", color: "#1a1a1a", fontFamily: INTER }}
         />
-        <span className="absolute bottom-3 right-4 text-xs" style={{ color: "#6B6B6E", fontFamily: SYNE, fontWeight: 700 }}>
+        <span className="absolute bottom-3 right-4 text-xs" style={{ color: "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>
           {content.length}/{maxChars}
         </span>
       </div>
 
       {hasFreeSlot ? (
         <button onClick={handleFreeSubmit} disabled={!content.trim() || loading}
-          className="w-full py-3.5 text-sm btn-post disabled:opacity-30"
-          style={{ backgroundColor: "#F58F7C", color: "#2C2B30", borderRadius: 12, border: "none", fontFamily: SYNE, fontWeight: 700 }}>
-          {loading ? "posting..." : "post for free \u2192"}
+          className="w-full py-3.5 text-sm transition-opacity disabled:opacity-30"
+          style={{ backgroundColor: "#B8860B", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
+          {loading ? "Posting..." : "Post for free \u2192"}
         </button>
       ) : (
         <button onClick={handlePaidSubmit} disabled={!content.trim() || loading}
-          className="w-full py-3.5 text-sm btn-post disabled:opacity-30"
-          style={{ backgroundColor: "#F58F7C", color: "#2C2B30", borderRadius: 12, border: "none", fontFamily: SYNE, fontWeight: 700 }}>
-          {loading ? "redirecting..." : `post it \u00b7 $${price} \u2192`}
+          className="w-full py-3.5 text-sm transition-opacity disabled:opacity-30"
+          style={{ backgroundColor: "#1a1a1a", color: "#fff", border: "none", fontFamily: SPACE, fontWeight: 500 }}>
+          {loading ? "Redirecting..." : `Pay & Post \u00b7 $${price} \u2192`}
         </button>
       )}
 
-      <div style={{ borderTop: "1px solid #4F4F51" }} className="mt-10" />
-      <footer className="py-8 text-center text-xs italic" style={{ color: "#6B6B6E", fontFamily: DM }}>
-        every message stays forever. the book is being written rn.
+      <div className="border-t mt-10" style={{ borderColor: "#E8E0D5" }} />
+      <footer className="py-8 text-center text-xs italic" style={{ color: "#9A8F85", fontFamily: FRAUNCES, fontWeight: 300 }}>
+        Every message is saved forever. One day, they&apos;ll all be in a book.
       </footer>
     </div>
   );
@@ -379,18 +462,18 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 hidden md:grid mx-auto w-full" style={{ gridTemplateColumns: "1fr 2fr 1fr", maxWidth: 1200 }}>
-        <aside className="p-6" style={{ backgroundColor: "#3A3A3D" }}>{leftCol}</aside>
-        <main className="px-10" style={{ backgroundColor: "#4F4F51", boxShadow: "0 0 60px rgba(0,0,0,0.15)" }}>{centerCol}</main>
-        <aside className="p-6" style={{ backgroundColor: "#3A3A3D" }}>{rightCol}</aside>
+        <aside className="p-6" style={{ backgroundColor: "#F0EBE3" }}>{leftCol}</aside>
+        <main className="px-10" style={{ backgroundColor: "#FFFFFF", boxShadow: "0 0 40px rgba(0,0,0,0.04)" }}>{centerCol}</main>
+        <aside className="p-6" style={{ backgroundColor: "#F0EBE3" }}>{rightCol}</aside>
       </div>
 
       <div className="flex-1 md:hidden flex flex-col pb-16">
         <div className="flex-1">
-          {mobileTab === "main" && <div className="min-h-full px-5" style={{ backgroundColor: "#4F4F51" }}>{centerCol}</div>}
-          {mobileTab === "highlights" && <div className="p-5" style={{ backgroundColor: "#3A3A3D" }}>{leftCol}</div>}
-          {mobileTab === "fame" && <div className="p-5" style={{ backgroundColor: "#3A3A3D" }}>{rightCol}</div>}
+          {mobileTab === "main" && <div className="min-h-full px-5" style={{ backgroundColor: "#FFFFFF" }}>{centerCol}</div>}
+          {mobileTab === "highlights" && <div className="p-5" style={{ backgroundColor: "#F0EBE3" }}>{leftCol}</div>}
+          {mobileTab === "fame" && <div className="p-5" style={{ backgroundColor: "#F0EBE3" }}>{rightCol}</div>}
         </div>
-        <nav className="fixed bottom-0 left-0 right-0 flex z-50" style={{ backgroundColor: "#2C2B30", borderTop: "1px solid #4F4F51" }}>
+        <nav className="fixed bottom-0 left-0 right-0 flex z-50" style={{ backgroundColor: "#FFFFFF", borderTop: "1px solid #E8E0D5" }}>
           {([
             { key: "main" as const, icon: <HomeIcon />, label: "Main" },
             { key: "highlights" as const, icon: <HighlightsIcon />, label: "Highlights" },
@@ -398,7 +481,7 @@ export default function Home() {
           ]).map((tab) => (
             <button key={tab.key} onClick={() => setMobileTab(tab.key)}
               className="flex-1 flex flex-col items-center gap-1 py-3 transition-colors"
-              style={{ color: mobileTab === tab.key ? "#F58F7C" : "#6B6B6E", fontFamily: SYNE, fontWeight: 700 }}>
+              style={{ color: mobileTab === tab.key ? "#C17D3C" : "#9A8F85", fontFamily: SPACE, fontWeight: 500 }}>
               {tab.icon}
               <span className="text-[10px]">{tab.label}</span>
             </button>

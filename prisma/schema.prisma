@@ -8,21 +8,32 @@ datasource db {
 }
 
 model Message {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   content         String
   username        String?
-  paid            Boolean  @default(false)
-  active          Boolean  @default(false)
-  free            Boolean  @default(false)
-  tier            Int      @default(1)
-  likes           Int      @default(0)
-  stripeSessionId String?  @unique
-  createdAt       DateTime @default(now())
+  paid            Boolean   @default(false)
+  active          Boolean   @default(false)
+  queued          Boolean   @default(false)
+  free            Boolean   @default(false)
+  saraPick        Boolean   @default(false)
+  tier            Int       @default(1)
+  likes           Int       @default(0)
+  activatedAt     DateTime?
+  stripeSessionId String?   @unique
+  createdAt       DateTime  @default(now())
 }
 
 model FreeSlot {
   id        String   @id @default(cuid())
   expiresAt DateTime
   used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?
+  message   String
   createdAt DateTime @default(now())
 }

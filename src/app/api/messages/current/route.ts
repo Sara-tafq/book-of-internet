@@ -5,11 +5,39 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const [currentMessage, totalCount, freeSlot, hallOfFame] = await Promise.all([
-      prisma.message.findFirst({
-        where: { active: true },
-        select: { id: true, content: true, username: true, free: true, tier: true, likes: true, createdAt: true },
-      }),
+    let currentMessage = await prisma.message.findFirst({
+      where: { active: true },
+      select: { id: true, content: true, username: true, free: true, tier: true, likes: true, createdAt: true, activatedAt: true },
+    });
+
+    // Queue promotion: if active message is > 30s old and queued messages exist, promote next
+    if (currentMessage?.activatedAt) {
+      const elapsed = Date.now() - currentMessage.activatedAt.getTime();
+      if (elapsed > 30000) {
+        const nextQueued = await prisma.message.findFirst({
+          where: { queued: true },
+          orderBy: { createdAt: "asc" },
+        });
+        if (nextQueued) {
+          await prisma.$transaction([
+            prisma.message.update({
+              where: { id: currentMessage.id },
+              data: { active: false },
+            }),
+            prisma.message.update({
+              where: { id: nextQueued.id },
+              data: { queued: false, active: true, activatedAt: new Date() },
+            }),
+          ]);
+          currentMessage = await prisma.message.findFirst({
+            where: { active: true },
+            select: { id: true, content: true, username: true, free: true, tier: true, likes: true, createdAt: true, activatedAt: true },
+          });
+        }
+      }
+    }
+
+    const [totalCount, freeSlot, hallOfFame, queueCount] = await Promise.all([
       prisma.message.count({
         where: { paid: true },
       }),
@@ -18,10 +46,13 @@ export async function GET() {
         orderBy: { createdAt: "desc" },
       }),
       prisma.message.findMany({
-        where: { paid: true, active: false },
+        where: { paid: true, active: false, queued: false },
         orderBy: { likes: "desc" },
         take: 3,
         select: { id: true, content: true, username: true, free: true, tier: true, likes: true, createdAt: true },
+      }),
+      prisma.message.count({
+        where: { queued: true },
       }),
     ]);
 
@@ -34,11 +65,27 @@ export async function GET() {
       freeSlotInfo = { active: true, minutesLeft };
     }
 
+    // Calculate seconds left for the active message
+    let secondsLeft: number | null = null;
+    if (currentMessage?.activatedAt) {
+      secondsLeft = Math.max(0, 30 - Math.floor((Date.now() - currentMessage.activatedAt.getTime()) / 1000));
+    }
+
     return NextResponse.json({
-      message: currentMessage,
+      message: currentMessage ? {
+        id: currentMessage.id,
+        content: currentMessage.content,
+        username: currentMessage.username,
+        free: currentMessage.free,
+        tier: currentMessage.tier,
+        likes: currentMessage.likes,
+        createdAt: currentMessage.createdAt,
+      } : null,
       totalCount,
       freeSlot: freeSlotInfo,
       hallOfFame,
+      queueCount,
+      secondsLeft,
     });
   } catch (error) {
     console.error("Error fetching current message:", error);
